@@ -84,13 +84,12 @@ const router = express.Router();
           });
         }*/
         try {
-          const hash = await bcrypt.hash(req.body.password, 10);
-  
+       
           const user = new User({
             //firstName: req.body.firstName,
             //lastName: req.body.lastName,
             email: req.body.email,
-            password: hash,
+            password: req.body.password,
           });
   
           try {
@@ -142,13 +141,14 @@ const router = express.Router();
       console.log(result);
       console.log(user.password);
       if (result) {
+        secret = "27676ghgtysj"
         const token = jwt.sign(
           {
             _id: user._id,
             email: user.email,
            // type: user.type,
           },
-          process.env.JWT_SECRET
+          secret
         );
   
         return res.status(200).json({
