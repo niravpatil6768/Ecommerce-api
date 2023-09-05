@@ -22,6 +22,10 @@ const Schema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref:'users'
     },
+    productImage: {
+        type: String,
+        required: true
+    }
     
     //thumbnail_url:{type: String}
 });

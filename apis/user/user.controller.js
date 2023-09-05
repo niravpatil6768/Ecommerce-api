@@ -7,57 +7,6 @@ const express = require("express");
 const router = express.Router();
 
 
-/*exports.register = async (req, res, next) => {
-    
-   
-        let body = req.body;
-        let newUser = new User(body);
-    
-        newUser.save().then(() => {
-            return newUser.createSession();
-        }).then((refreshToken) => {
-            //session created successfully - refreshtoken returned.
-            //now we generate an access auth token for the user
-    
-            return newUser.generateAccessAuthToken().then((accessToken) => {
-                return {accessToken, refreshToken}
-            });
-    }).then((authTokens) => {
-        res
-        .header('x-refresh-token', authTokens.refreshToken)
-        .header('x-access-token', authTokens.accessToken)
-        .send(newUser);
-    }).catch((e) => {
-        res.status(400).send(e);
-        console.log("32");
-    })
-       
-    };
-
-
-  exports.login = async (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
- 
-    User.findByCredentials(email, password).then((user) => {
-     return user.createSession().then((refreshToken) => {
-        
-         return user.generateAccessAuthToken().then((accessToken) => {
-             return {accessToken, refreshToken}
-         });
-     }).then((authTokens) => {
-         res
-         .header('x-refresh-token', authTokens.refreshToken)
-         .header('x-access-token', authTokens.accessToken)
-         .send(user);
-     })
-     }).catch((e) => {
-         res.status(400).send(e);
-         console.log(email);
-         console.log(password);
-    })
- };*/
-
 
 
 /*>>>>>>>*/
@@ -73,16 +22,7 @@ const router = express.Router();
         return res.status(409).json({
           msg: "already user exist with this email!",
         });
-      } /*else {
-        try {
-          await this.emailVerification(req, res);
-          console.log("User verification success");
-        } catch (error) {
-          return res.status(500).json({
-            pathofmethod: "77 Error while sending email",
-            error: error,
-          });
-        }*/
+      } 
         try {
        
           const user = new User({
@@ -90,6 +30,7 @@ const router = express.Router();
             //lastName: req.body.lastName,
             email: req.body.email,
             password: req.body.password,
+            type: req.body.type,
           });
   
           try {
@@ -146,7 +87,7 @@ const router = express.Router();
           {
             _id: user._id,
             email: user.email,
-           // type: user.type,
+            type: user.type,
           },
           secret
         );
@@ -154,6 +95,7 @@ const router = express.Router();
         return res.status(200).json({
           message: "Login successful",
           token: token,
+          type: user.type
          
         });
       }
@@ -168,6 +110,60 @@ const router = express.Router();
       });
     }
   };
-  
 
-// module.exports = router; 
+  exports.getUsers = (req, res, next) => {
+    const loggedInUserRole = req.userType;
+    let tempQuery = {};
+    if (loggedInUserRole == "SUPERADMIN") {
+      tempQuery = {};
+    } 
+    
+  
+    User.find(tempQuery)
+      .exec()
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((err) => {
+        res.status(500).json({
+          pathofmethod: "Error while getting users",
+          error: err,
+        });
+      });
+  };
+
+  exports.deleteUser = (req, res) => {
+    let userId = req.params.userId;
+    //const loggedInUserRole = req.userType;
+   // console.log("1"+loggedInUserRole);
+    console.log("2"+req.userType);
+    if (!isValidObjectId(userId))
+      return res.status(400).json({
+        message: "User not found with given id",
+        id: req.params.id,
+      });
+  
+    User.findOneAndRemove(userId, (err, user) => {
+      if (!err) {
+        if (user != null) {
+          {
+            res.status(200).json({
+              message: "User Deleted Successfully",
+              user,
+            });
+          }
+        } else {
+          res.status(404).json({
+            message: "User not found",
+          });
+        }
+      } else {
+        res.status(500).json({
+          message: "Error while deleting user",
+          error: err,
+        });
+      }
+    });
+  };
+
+ 

@@ -1,6 +1,23 @@
 const { isValidObjectId } = require("mongoose");
 var ObjectId = require('mongodb').ObjectID;
 const Product = require("./product.model");
+const multer = require('multer');
+//const upload = multer({dest: 'uploads/'});
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/'); // Define the directory where uploaded files will be stored
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now()  + '-' + file.originalname); // Define the filename
+    },
+  });
+  
+const upload = multer({ 
+    storage,
+    limits: { fileSize: 2 * 1024 * 1024 }, 
+ });
+  
 
 exports.getProducts = (req, res, next) => {
 
@@ -38,8 +55,8 @@ exports.getProduct = (req, res, next) => {
     });
 }
 
-exports.createProduct = (req, res, next) => {
-
+/*old*exports.createProduct = upload.single('productImage'),(req, res, next) => {
+    console.log(req.file);
     const product = new Product({
         name: req.body.name,
         //thumbnail:req.body.thumbnail,
@@ -95,4 +112,44 @@ exports.createProduct = (req, res, next) => {
                 error: err
             })
         });*/
-}
+
+        exports.createProduct = (req, res, next) => {
+            // Use the 'upload.single' middleware to handle the 'productImage' field
+            upload.single('productImage')(req, res, (err) => {
+                console.log(req.file);
+              /*if (err) {
+                // Handle any multer errors (e.g., file too large, invalid file type)
+                return res.status(400).json({ message: 'File upload error', error: err });
+              }*/
+          
+              // Create the product object without the image field for now
+              const product = new Product({
+                name: req.body.name,
+                sellername: req.body.sellername,
+                price: req.body.price,
+                description: req.body.description,
+                productImage : req.file.path
+              });
+          
+              // If there's an uploaded file, store the path to the uploaded image
+              if (req.file) {
+                product.productImage = req.file.path;
+              }
+          
+              // Save the product to the database
+              product
+                .save()
+                .then((product) => {
+                  res.status(201).json({
+                    message: 'Product added successfully',
+                    product,
+                  });
+                })
+                .catch((err) => {
+                  res.status(500).json({
+                    message: 'Error while creating product',
+                    error: err,
+                  });
+                });
+            });
+          };

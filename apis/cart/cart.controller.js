@@ -5,9 +5,9 @@ const User = require("../user/user.model");
 
 
 exports.getCart = (req, res) => {
-   // let userId = req.params.userId;
-    let userId = req._id
-    console.log(userId + "10");
+    let userId = req.params.userId;
+    //let userId = decoded._id
+   // console.log( decoded._id+ "11");
     if(!isValidObjectId(userId)) {
         return res.status(400).json({
             message : 'Invalid user id',
@@ -42,8 +42,9 @@ exports.getCart = (req, res) => {
 
 exports.addItemToCart = (req, res) => {
     const { productId } = req.body;
-    //const userId = req.params.userId;
-    let userId = req._id
+    const userId = req.params.userId;
+    //let userId = decoded._id
+    console.log(userId);
     if(!isValidObjectId(userId)) {
         return res.status(400).json({
             message : 'Invalid user id',
@@ -78,11 +79,11 @@ exports.addItemToCart = (req, res) => {
                             const indexFound = cart.products.findIndex(
                                 (item) => item.productId == productId
                             );
-                            if (indexFound > -1) {
+                           /* if (indexFound > -1) {
                                 return res.status(200).json({
                                     msg: "Product exists in cart",
                                 });
-                            }
+                            }*/
 
                             cart.products.push({
                                     productId: productId,

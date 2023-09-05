@@ -38,7 +38,11 @@ const jwtSecret = "22794756100663983720febngrbgv3120945259";
 });*/
 
 const Schema = mongoose.Schema({
-   
+    type: {
+        type: String,
+        enum: ['BUYER','SELLER', 'SUPERADMIN'],
+        default: 'BUYER'
+    },
     email: {
         type: String,
         required: true
@@ -201,4 +205,4 @@ let generateRefreshTokenExpiryTime = () => {
     return ((Date.now() / 1000) + secondsUntilExpire);
 }
 
-module.exports = mongoose.model('User', Schema);
+module.exports = mongoose.model('users', Schema);
