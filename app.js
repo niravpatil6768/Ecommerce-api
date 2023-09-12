@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
-//app.use(express.static('uploads'));
-app.use(express.static('uploads'));
+app.use('/upload', express.static('uploads'));
 
 
 const userRoutes = require("./apis/user/user.route");
