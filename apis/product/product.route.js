@@ -6,7 +6,7 @@ const multer = require('multer');
 const authh = require('../middlewares/authh');
 const roleAccess = require("../middlewares/roleAccess");
 
-router.get('/:category',  ProductController.getProducts);
+router.get('/:category',  ProductController.getProductcategory);
 router.get('/',  ProductController.getProducts);
 router.post('/addproduct', authh, roleAccess(['SELLER']) , ProductController.createProduct);
 router.get('/getProduct/:id', ProductController.getProduct);

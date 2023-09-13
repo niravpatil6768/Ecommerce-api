@@ -23,7 +23,7 @@ const upload = multer({
 
 exports.getProducts = (req, res, next) => {
     const category = req.params.category;
-    Product.find({category}).exec()
+    Product.find().exec()
     .then(products => {
         res.status(200).json({
             products
@@ -34,6 +34,22 @@ exports.getProducts = (req, res, next) => {
             message: 'Failed to get all Products'
         });
     }); 
+}
+
+
+exports.getProductcategory = (req, res, next) => {
+  const category = req.params.category;
+  Product.find({category}).exec()
+  .then(products => {
+      res.status(200).json({
+          products
+      });
+  }).catch((err) => {
+      res.status(500).json({
+          error: err,
+          message: 'Failed to get all Products'
+      });
+  }); 
 }
 
 exports.getProduct = (req, res, next) => {
