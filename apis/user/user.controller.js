@@ -132,9 +132,10 @@ const router = express.Router();
       });
   };
 
-  exports.deleteUser = (req, res) => {
+  /*exports.deleteUser = async (req, res) => {
+    
     let userId = req.params.userId;
-    //const loggedInUserRole = req.userType;
+    const loggedInUserRole = req.userType;
    // console.log("1"+loggedInUserRole);
     console.log("2"+req.userType);
     if (!isValidObjectId(userId))
@@ -146,6 +147,9 @@ const router = express.Router();
     User.findOneAndRemove(userId, (err, user) => {
       if (!err) {
         if (user != null) {
+          if (
+            loggedInUserRole == "SUPERADMIN" 
+          )
           {
             res.status(200).json({
               message: "User Deleted Successfully",
@@ -164,6 +168,41 @@ const router = express.Router();
         });
       }
     });
+  };*/
+
+
+  exports.deleteUser = async (req, res) => {
+    const userId = req.params.userId;
+    const loggedInUserRole = req.userType;
+  
+    if (!isValidObjectId(userId))
+      return res.status(400).json({
+        message: "User not found with given id",
+        id: req.params.id,
+      });
+  
+    try {
+      const user = await User.findOneAndDelete({ _id: userId });
+  
+      if (user) {
+        //if (loggedInUserRole === "SUPERADMIN") {
+          return res.status(200).json({
+            message: "User Deleted Successfully",
+            
+          });
+        
+      } else {
+        return res.status(404).json({
+          message: "User not found",
+        });
+      }
+    } catch (err) {
+      return res.status(500).json({
+        message: "Error while deleting user",
+        error: err,
+      });
+    }
   };
+  
 
  

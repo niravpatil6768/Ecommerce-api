@@ -6,10 +6,14 @@ const multer = require('multer');
 const authh = require('../middlewares/authh');
 const roleAccess = require("../middlewares/roleAccess");
 
-router.get('/:category',  ProductController.getProductcategory);
-router.get('/',  ProductController.getProducts);
-router.post('/addproduct', authh, roleAccess(['SELLER']) , ProductController.createProduct);
-router.get('/getProduct/:id', ProductController.getProduct);
+router.get('/:category', ProductController.getProductcategory);
+router.get('/', ProductController.getProducts);
+router.get('/product/:id', authh, ProductController.getProduct);
+router.get('/getproduct/:userId', ProductController.getProductsClient);
+router.post('/addproduct/:userId', authh, roleAccess(['SELLER']) , ProductController.createProduct);
+router.delete('/deleteproduct/:id', authh, roleAccess(['SELLER']), ProductController.deleteProduct);
+router.put('/updateproduct/:id', authh, roleAccess(['SELLER']), ProductController.updateProduct);
+//router.get('/getProduct/:id', ProductController.getProduct);
 router.post('/getUploadURL/:key',ProductController.getUploadURL);
 
 

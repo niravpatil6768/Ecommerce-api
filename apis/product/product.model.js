@@ -19,8 +19,8 @@ const Schema = mongoose.Schema({
         required: true
     },
     seller: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref:'users'
+        type : mongoose.Schema.Types.ObjectId,
+        ref: 'users'
     },
     productImage: {
         type: String,
@@ -30,7 +30,8 @@ const Schema = mongoose.Schema({
         type: String,
         enum: ['ELECTRONICS','FASHION', 'SPORTS','ALL'],
         default: 'ALL'
-    }
+    },
+   
     
     //thumbnail_url:{type: String}
 });

@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 app.use(bodyparser.urlencoded({extended: false}));
@@ -10,6 +11,7 @@ app.use('/upload', express.static('uploads'));
 const userRoutes = require("./apis/user/user.route");
 const productRoutes = require("./apis/product/product.route");
 const cartRoutes = require("./apis/cart/cart.route");
+const paymentRoutes = require("./apis/payment/payment.route");
 
 
 app.get("/health", (req, res, next) => {
@@ -36,6 +38,7 @@ app.get("/health", (req, res, next) => {
  app.use('/user',userRoutes); 
  app.use('/productpage',productRoutes); 
  app.use('/cart', cartRoutes);
+ app.use('/payment', paymentRoutes);
 
  mongoose.Promise = global.Promise;
 

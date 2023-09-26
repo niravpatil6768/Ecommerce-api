@@ -33,7 +33,7 @@ exports.getCart = (req, res) => {
                 });
             } else {
                 return res.status(200).json({
-                    msg: "Cart empty for this user",
+                    //msg: "Cart empty for this user",
                     cart
                 });
             }
