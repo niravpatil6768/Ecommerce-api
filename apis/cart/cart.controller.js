@@ -79,12 +79,7 @@ exports.addItemToCart = (req, res) => {
                             const indexFound = cart.products.findIndex(
                                 (item) => item.productId == productId
                             );
-                           /* if (indexFound > -1) {
-                                return res.status(200).json({
-                                    msg: "Product exists in cart",
-                                });
-                            }*/
-
+                          
                             cart.products.push({
                                     productId: productId,
                                     price: product.price

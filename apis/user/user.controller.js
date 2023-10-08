@@ -1,6 +1,6 @@
 const User = require("./user.model");
 const jwt = require("jsonwebtoken");
-const { isValidObjectId } = require("mongoose");
+const { isValidObjectId } = require("mongoose"); //to check validobjectid or not.
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const express = require("express");
@@ -25,9 +25,9 @@ const router = express.Router();
       } 
         try {
        
+          //new user object created
           const user = new User({
-            //firstName: req.body.firstName,
-            //lastName: req.body.lastName,
+            
             email: req.body.email,
             password: req.body.password,
             type: req.body.type,
@@ -75,14 +75,14 @@ const router = express.Router();
         });
       }
   
-      //const hash = await bcrypt.hash(req.body.password, 10);
-  
+  // compare body pass with hashed pass using bcrypt.compare
       const result = await bcrypt.compare(req.body.password,user.password);
       console.log(req.body.password);
       console.log(result);
       console.log(user.password);
       if (result) {
         secret = "27676ghgtysj"
+        //generate JSON web token which contain user-related info. such as user Id, email, type. it's signed using secret key.
         const token = jwt.sign(
           {
             _id: user._id,
@@ -111,6 +111,7 @@ const router = express.Router();
     }
   };
 
+  //get all users
   exports.getUsers = (req, res, next) => {
     const loggedInUserRole = req.userType;
     let tempQuery = {};
@@ -132,44 +133,7 @@ const router = express.Router();
       });
   };
 
-  /*exports.deleteUser = async (req, res) => {
-    
-    let userId = req.params.userId;
-    const loggedInUserRole = req.userType;
-   // console.log("1"+loggedInUserRole);
-    console.log("2"+req.userType);
-    if (!isValidObjectId(userId))
-      return res.status(400).json({
-        message: "User not found with given id",
-        id: req.params.id,
-      });
-  
-    User.findOneAndRemove(userId, (err, user) => {
-      if (!err) {
-        if (user != null) {
-          if (
-            loggedInUserRole == "SUPERADMIN" 
-          )
-          {
-            res.status(200).json({
-              message: "User Deleted Successfully",
-              user,
-            });
-          }
-        } else {
-          res.status(404).json({
-            message: "User not found",
-          });
-        }
-      } else {
-        res.status(500).json({
-          message: "Error while deleting user",
-          error: err,
-        });
-      }
-    });
-  };*/
-
+ 
 
   exports.deleteUser = async (req, res) => {
     const userId = req.params.userId;
@@ -185,7 +149,7 @@ const router = express.Router();
       const user = await User.findOneAndDelete({ _id: userId });
   
       if (user) {
-        //if (loggedInUserRole === "SUPERADMIN") {
+        
           return res.status(200).json({
             message: "User Deleted Successfully",
             

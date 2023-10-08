@@ -1,13 +1,14 @@
-const express = require('express');
-const app = express();
-app.use(express.json());
+const express = require('express');  //import express module
+const app = express();   //create instance of express framework
+app.use(express.json()); //configure express application to parse json req. body. it enables application to automatically parse
+                         // incoming json data in to js object.
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
-app.use('/upload', express.static('uploads'));
+app.use('/upload', express.static('uploads'));  //serves static files
 
-
+//import routes module
 const userRoutes = require("./apis/user/user.route");
 const productRoutes = require("./apis/product/product.route");
 const cartRoutes = require("./apis/cart/cart.route");
@@ -21,6 +22,7 @@ app.get("/health", (req, res, next) => {
     });
   });
   
+  //to handle CORS error( implemented by web browsers to prevent web pages from making requests to a different domain)
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -35,11 +37,14 @@ app.get("/health", (req, res, next) => {
   });
 
   
+
+ //it is mount set of routes which is defined in userroutes to defined base url path.  
  app.use('/user',userRoutes); 
  app.use('/productpage',productRoutes); 
  app.use('/cart', cartRoutes);
  app.use('/payment', paymentRoutes);
 
+ //configure mongoose to use standard promise library to handle async. operation
  mongoose.Promise = global.Promise;
 
  mongoose.connect('mongodb+srv://niravpatil098:npn987654N@cluster0.pionla9.mongodb.net/').then(() => {
@@ -50,4 +55,4 @@ app.get("/health", (req, res, next) => {
      console.log(e);
  });
 
- module.exports = app;
+ module.exports = app;  //export instance of express application so, it can use in other files

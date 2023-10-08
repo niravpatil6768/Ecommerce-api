@@ -1,41 +1,11 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); //popular library used for working with JSON web token
 const crypto = require('crypto');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs'); //used for securely hashing password and veryfing password.
 
 const jwtSecret = "22794756100663983720febngrbgv3120945259";
 
-/*const Schema = mongoose.Schema({
-    
-    email: { type: String, required: true, minlength: 1,
-         unique: true, trim: true,
-        // match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-    },
-    password: {type: String, required: true, minlength: 8},
-    sessions: [{
-        token: {
-            type: String,
-            required: true
-        },
-        expiresAt: {
-            type: Number,
-            required: true
-        }
-    }],
-    products: [{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Products'
-    }],
-    resetToken:{
-        type:String,
-        default:''
-    },
-    resetTokenExpiration:{
-        type:String,
-        default:''
-    },
-});*/
 
 const Schema = mongoose.Schema({
     type: {
@@ -121,6 +91,7 @@ Schema.statics.getJWTSecret = () => {
 Schema.statics.getJWTSecret = () => {
     return jwtSecret;
 }
+
 Schema.statics.findByIdAndToken = function(_id, token){
     //find user by id and token
     //used in auth middleware (varifysession)
@@ -161,6 +132,7 @@ Schema.statics.hasRefreshTokenExpired = (expiresAt) => {
     }
 }
 
+//important
 //middleware
 //before a user document is saved, this code runs
 Schema.pre('save', function(next){

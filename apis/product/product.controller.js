@@ -4,7 +4,7 @@ const Product = require("./product.model");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
-//const upload = multer({dest: 'uploads/'});
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -36,6 +36,7 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
+//show products for client
 exports.getProductsClient = (req, res, next) => {
   const sellerId = req.params.userId; // Assuming sellerId is passed in the URL params
   console.log(sellerId);
@@ -55,6 +56,7 @@ exports.getProductsClient = (req, res, next) => {
     });
 };
 
+//find products by category
 exports.getProductcategory = (req, res, next) => {
   const category = req.params.category;
   Product.find({ category })
@@ -71,6 +73,7 @@ exports.getProductcategory = (req, res, next) => {
       });
     });
 };
+
 
 exports.getProduct = (req, res, next) => {
   Product.findById(req.body.id)
@@ -95,13 +98,16 @@ exports.getProduct = (req, res, next) => {
     });
 };
 
+//create product
 exports.createProduct = (req, res, next) => {
   
   const userId = req.params.userId;
+  //use upload middleware to handle upload of product image
+  //except file with field name productimage
   upload.single("productImage")(req, res, (err) => {
     console.log(req.file);
 
-   
+   //create object 
     const product = new Product({
       name: req.body.name,
       sellername: req.body.sellername,
@@ -140,6 +146,7 @@ exports.createProduct = (req, res, next) => {
 });
 };
 
+//delete product
 exports.deleteProduct = async (req, res) => {
   const productId = req.params.id;
 
@@ -160,7 +167,7 @@ exports.deleteProduct = async (req, res) => {
     }
 
     
-    // Delete course from database
+    
     await Product.findByIdAndRemove(productId);
 
     res.status(200).json({
@@ -176,47 +183,8 @@ exports.deleteProduct = async (req, res) => {
 };
 
 
-/*>>>>exports.updateProduct = (req, res, next) => {
-  const productId = req.params.id;
 
-  if(!isValidObjectId(productId)) {
-      return res.status(400).json({
-          message : 'Product not found with given id',
-          productId : productId
-      });
-  }
-  
-  var product = {
-      name: req.body.name,
-      sellername:req.body.sellername,
-      price: req.body.price,
-      description: req.body.description,
-      category: req.body.category,
-      
-  };
-
-  Product.findByIdAndUpdate(req.params.id, { $set : product }, { new : true }, (err, Product) => {
-      if(!err) {
-          if(Product != null) {
-              res.status(200).json({
-                  message: 'Product updated Successfully',
-                  Product
-              });
-          } else {
-              res.status(404).json({
-                  message: 'Product not found'
-              });
-          }
-      } else {
-          res.status(500).json({
-              message: 'Error while updating product',
-              error: err
-          });
-      }
-  });   
-}*/
-
-
+//update product
 exports.updateProduct = async (req, res, next) => {
   const productId = req.params.id;
 
@@ -283,32 +251,22 @@ exports.getProduct = (req, res, next) => {
 }
 
 
-exports.getUploadURL = async (req, res, next) => {
+/*exports.getUploadURL = async (req, res, next) => {
   try {
     const { name, sellername, price, description } = req.body;
     const productImage = req.file;
 
-    // Check if a course with the same name already exists
-    /* const existingCourse = await Course.findOne({ name });
-          
-              if (existingCourse) {
-                return res.status(409).json({
-                  msg: "A course with this name already exists!",
-                });
-              }*/
-
-    // Check if the user is an instructor (You should have a way to verify this)
-    //if (req.userType === "INSTRUCTOR") {
+   
     const product = new Product({
       name,
       productImage: productImage.filename, // Use the filename of the uploaded image
       sellername,
       price,
       description,
-      //instructor: req.userId,
+      
     });
 
-    // Save the course to the database
+    
     const savedProduct = await product.save();
 
     res.status(200).json({
@@ -324,11 +282,7 @@ exports.getUploadURL = async (req, res, next) => {
         console.error(err);
       }
     });
-    /* else {
-                return res.status(400).json({
-                  message: 'Instructor not found with the given id',
-                  id: req.userId,
-                });*/
+   
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -336,4 +290,4 @@ exports.getUploadURL = async (req, res, next) => {
       error,
     });
   }
-};
+};*/

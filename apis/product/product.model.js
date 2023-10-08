@@ -5,7 +5,7 @@ const Schema = mongoose.Schema({
         type: String,
         required: true
     },
-   // thumbnail:{type:String,required:true},
+  
     sellername: {
         type: String,
         required: true

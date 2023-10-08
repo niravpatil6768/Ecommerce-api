@@ -14,7 +14,7 @@ router.post('/addproduct/:userId', authh, roleAccess(['SELLER']) , ProductContro
 router.delete('/deleteproduct/:id', authh, roleAccess(['SELLER']), ProductController.deleteProduct);
 router.put('/updateproduct/:id', authh, roleAccess(['SELLER']), ProductController.updateProduct);
 //router.get('/getProduct/:id', ProductController.getProduct);
-router.post('/getUploadURL/:key',ProductController.getUploadURL);
+//router.post('/getUploadURL/:key',ProductController.getUploadURL);
 
 
 

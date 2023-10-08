@@ -5,11 +5,15 @@ const authh = (req, res, next) => {
     try {
             let token = req.headers.authorization;
         if(token) {
+            //split to remove the "Bearer " prefix
             token = token.split(" ")[1];
+            // verify token 
             let user = jwt.verify(token,SECRET);
+            //id and type from JWT payload are added to request object
             req.userId = user._id;
             req.userType = user.type;
 
+            //use to pass control to next middleware
             next();
         } else {
             res.status(401).json({

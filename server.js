@@ -1,11 +1,13 @@
-const http = require('http');
-const app = require('./app');
-const Razorpay = require('razorpay');
-const port = process.env.PORT || 3000;
+// import modules
+const http = require('http'); //require to create http server and handling http req. and response
+const app = require('./app');  //import isntanc of express application 
+const Razorpay = require('razorpay'); //useful for integration with razopay for payment purpose.
+const port = process.env.PORT || 3000; //define post on which incoming http req. will be listen
 
-const server = http.createServer(app);
+const server = http.createServer(app); //create server. take app as a arguments 
+                                      //it means server will handle req. according to logic define in app.js 
 
-server.listen(port);
+server.listen(port);   //server will listen on specified port
 
 var instance = new Razorpay({
     key_id: 'rzp_test_3b88pgSESx20IL',
