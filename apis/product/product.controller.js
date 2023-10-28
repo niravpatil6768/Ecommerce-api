@@ -22,7 +22,7 @@ const upload = multer({
 
 exports.getProducts = (req, res, next) => {
   Product.find()
-    .exec()
+    .exec()           //use to return query. it also return promise
     .then((products) => {
       res.status(200).json({
         products,
@@ -40,7 +40,6 @@ exports.getProducts = (req, res, next) => {
 exports.getProductsClient = (req, res, next) => {
   const sellerId = req.params.userId; // Assuming sellerId is passed in the URL params
   console.log(sellerId);
- // console.log(userId);
   Product.find({ seller: sellerId })
     .exec()
     .then((products) => {
@@ -120,8 +119,8 @@ exports.createProduct = (req, res, next) => {
     });
 
     
-    if (req.file) {
-      product.productImage = `upload/${req.file.filename}`;
+    if (req.file) {  //check req.file is exists or not
+      product.productImage = `upload/${req.file.filename}`;  //set productimage to path of uploaded file.
     }
 
     if(req.userType == "SELLER") {
@@ -199,7 +198,7 @@ exports.updateProduct = async (req, res, next) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
       {
-        $set: {
+        $set: {             //update product based on provided value in body
           name: req.body.name,
           sellername: req.body.sellername,
           price: req.body.price,
@@ -251,43 +250,3 @@ exports.getProduct = (req, res, next) => {
 }
 
 
-/*exports.getUploadURL = async (req, res, next) => {
-  try {
-    const { name, sellername, price, description } = req.body;
-    const productImage = req.file;
-
-   
-    const product = new Product({
-      name,
-      productImage: productImage.filename, // Use the filename of the uploaded image
-      sellername,
-      price,
-      description,
-      
-    });
-
-    
-    const savedProduct = await product.save();
-
-    res.status(200).json({
-      message: "product added successfully",
-      product: savedProduct,
-      url: `/uploads/${productImage.filename}`, // Return the local URL of the uploaded image
-    });
-
-    // Move the uploaded image to the "uploads" folder
-    const filePath = path.join(__dirname, "../uploads", productImage.filename);
-    fs.rename(productImage.path, filePath, (err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-   
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "Error while processing the upload",
-      error,
-    });
-  }
-};*/

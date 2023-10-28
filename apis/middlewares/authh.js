@@ -1,3 +1,4 @@
+//it is use for authentication.like, it will stop user to go on particular page without login
 const jwt = require("jsonwebtoken");
 const SECRET = "27676ghgtysj";
 const authh = (req, res, next) => {

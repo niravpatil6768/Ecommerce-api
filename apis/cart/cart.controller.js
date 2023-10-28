@@ -6,8 +6,7 @@ const User = require("../user/user.model");
 
 exports.getCart = (req, res) => {
     let userId = req.params.userId;
-    //let userId = decoded._id
-   // console.log( decoded._id+ "11");
+   
     if(!isValidObjectId(userId)) {
         return res.status(400).json({
             message : 'Invalid user id',

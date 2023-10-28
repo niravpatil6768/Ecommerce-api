@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ProductController = require('./product.controller');
-const multer = require('multer');
+const multer = require('multer');  //use to handle file-uploads in node.js
 //nst upload = multer({dest: '/uploads/'});
 const authh = require('../middlewares/authh');
 const roleAccess = require("../middlewares/roleAccess");

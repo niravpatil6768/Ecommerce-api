@@ -39,7 +39,7 @@ app.get("/health", (req, res, next) => {
   
 
  //it is mount set of routes which is defined in userroutes to defined base url path.  
- app.use('/user',userRoutes); 
+ app.use('/user',userRoutes);  //use to mount middleware to specific routes.
  app.use('/productpage',productRoutes); 
  app.use('/cart', cartRoutes);
  app.use('/payment', paymentRoutes);

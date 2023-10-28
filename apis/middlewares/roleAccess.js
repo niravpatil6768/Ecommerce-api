@@ -1,3 +1,4 @@
+//it provide access to particular page based on userType
 const roleAccess = (permissions) => { 
     
     return (req, res, next) => {

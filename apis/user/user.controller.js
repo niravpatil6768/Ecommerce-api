@@ -1,7 +1,7 @@
 const User = require("./user.model");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); //for handing JSON WEB TOKEN
 const { isValidObjectId } = require("mongoose"); //to check validobjectid or not.
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs"); // use to parse password, store parse pass. and compare it.
 const crypto = require("crypto");
 const express = require("express");
 const router = express.Router();

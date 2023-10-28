@@ -1,6 +1,6 @@
 const Razorpay = require("razorpay");
 const Payment = require("../payment/payment.model");
-const crypto = require("crypto");
+const crypto = require("crypto"); //it provide cryptographic functionality with is used for hashing, encryption, decryption
 const User = require("../user/user.model");
 const mongoose = require("mongoose");
 const Cart = require("../cart/cart.model");
@@ -13,21 +13,21 @@ const razorpay = new Razorpay({
   key_secret: 'Io5YRa72D5lwf8B6mMG4TJZy'
 });
 
-
+// to create payment order
 exports.createPayment = async (req, res) => {
   try {
     const paymentAmount = req.body.amount;
     const products = req.body.products;
 
-    const productIds = products.map(product => product._id);
+    const productIds = products.map(product => product._id);  //map products with productId
 
-    const order = await razorpay.orders.create({
+    const order = await razorpay.orders.create({ //call razorpay api to create new order
         amount: paymentAmount * 100,
         currency: 'INR'
     },
         
     );
-    
+    //once create order. create object
     const payment = new Payment({
       razorpay_order_id: order.id,
       user: req.userId,
@@ -40,7 +40,7 @@ exports.createPayment = async (req, res) => {
     await payment.save();
     
     res.json({
-      orderId: order.id
+      orderId: order.id  //response with the orderId
     });
 
   } catch (err) {
@@ -51,7 +51,7 @@ exports.createPayment = async (req, res) => {
 };
 
 exports.webhook = async (req, res) => {
-  //console.log("hello");
+  
   try {
 
     const razorpay_order_id = req.body.orderId;
@@ -59,6 +59,7 @@ exports.webhook = async (req, res) => {
     const razorpay_signature = req.body.signature;
   
 
+    //find payment using razorpay_order_id
     const payment = await Payment.findOne({ razorpay_order_id });
     console.log(req.body.orderId);
     console.log(razorpay_order_id);

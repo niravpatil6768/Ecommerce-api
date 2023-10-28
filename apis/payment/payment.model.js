@@ -39,4 +39,4 @@ const Schema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Payment', Schema);
+module.exports = mongoose.model('Payment', Schema);  //create model for Payment object..which is use to intract with the db.
